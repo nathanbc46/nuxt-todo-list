@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
-const {user, logout } = useUser()
+const { user, logout } = useUser()
 const toast = useToast()
+const { start, finish } = useLoadingIndicator()
+const logoutLoading = ref(false)
 
 const items = [
     {
@@ -9,7 +11,7 @@ const items = [
         icon: 'i-lucide-house',
         to: '/',
     },
-{
+    {
         label: 'About',
         icon: 'i-lucide-info',
         to: '/about',
@@ -28,22 +30,37 @@ const items = [
 
 // 🔑 ซ่อนเมนู Sign In เมื่อ user ล็อกอินแล้ว
 const filteredItems = computed(() =>
-  user.value
-     ? items.filter(i => !['Sign Up', 'Sign In'].includes(i.label))
-    : items
+    user.value
+        ? items.filter(i => !['Sign Up', 'Sign In'].includes(i.label))
+        : items
 )
 
 async function onLogout() {
     //if (confirm('Are you sure you want to logout?')) {
+    logoutLoading.value = true
+    start({ force: true })
+    try {
         logout()
-        await navigateTo('/')
         toast.add({
             title: 'Logged out',
             description: 'You have been logged out successfully.',
             color: 'success',
             duration: 1000,
         })
-    //}
+        await navigateTo('/')
+    } catch (error) {
+        console.error(error)
+        toast.add({
+            title: 'Error',
+            description: 'Failed to logout.',
+            color: 'error',
+            duration: 1000,
+        })
+    }
+    finally {
+        logoutLoading.value = false
+        finish()
+    }
 }
 
 </script>
@@ -54,18 +71,18 @@ async function onLogout() {
                 <template #components-trailing>
                     <ColorModeButton />
                 </template>
-            </UNavigationMenu> -->
-            
+</UNavigationMenu> -->
+
             <UNavigationMenu :items="filteredItems" />
             <template #right>
                 <UAvatar v-if="user" :image="user.image" />
-                {{  user?.name }}
-                <UTooltip v-if="user" text="Logout" :kbds="['meta', 'L']" >
-                <UButton 
-                    color="neutral" variant="ghost" 
-                        icon="i-lucide-log-out" aria-label="Logout"
+                {{ user?.name }}
+                <UTooltip v-if="user" text="Logout" :kbds="['meta', 'L']">
+                    <UButton 
+                    color="neutral" variant="ghost" icon="i-lucide-log-out" aria-label="Logout"
+                        :loading="logoutLoading"
                         @click="onLogout" />
-                    </UTooltip>
+                </UTooltip>
                 <UColorModeButton />
 
                 <!-- <UTooltip text="Open on GitHub" :kbds="['meta', 'G']">
