@@ -15,25 +15,15 @@ const items = [
         label: 'About',
         icon: 'i-lucide-info',
         to: '/about',
-    },
-    {
-        label: 'Sign Up',
-        icon: 'i-lucide-user-plus',
-        to: '/sign-up',
-    },
-    {
-        label: 'Sign In',
-        icon: 'i-lucide-log-in',
-        to: '/login',
     }
 ] satisfies NavigationMenuItem[]
 
 // 🔑 ซ่อนเมนู Sign In เมื่อ user ล็อกอินแล้ว
-const filteredItems = computed(() =>
-    user.value
-        ? items.filter(i => !['Sign Up', 'Sign In'].includes(i.label))
-        : items
-)
+// const filteredItems = computed(() =>
+//     user.value
+//         ? items.filter(i => !['Sign Up', 'Sign In'].includes(i.label))
+//         : items
+// )
 
 async function onLogout() {
     //if (confirm('Are you sure you want to logout?')) {
@@ -66,14 +56,14 @@ async function onLogout() {
 </script>
 <template>
     <div class="p-5">
-        <UHeader title="Nathan Todo List">
+        <UHeader title="Todo List">
             <!-- <UNavigationMenu :items="items" class="w-full justify-center">
                 <template #components-trailing>
                     <ColorModeButton />
                 </template>
 </UNavigationMenu> -->
 
-            <UNavigationMenu :items="filteredItems" />
+            <UNavigationMenu :items="items" />
             <template #right>
                 <UAvatar v-if="user" :image="user.image" />
                 {{ user?.name }}
@@ -83,6 +73,14 @@ async function onLogout() {
                         :loading="logoutLoading"
                         @click="onLogout" />
                 </UTooltip>
+                <UButton 
+                    v-if="!user"
+                    color="neutral" variant="ghost" icon="i-lucide-user-plus" aria-label="Sign Up"
+                        to="/sign-up" />
+                <UButton 
+                    v-if="!user"
+                    color="neutral" variant="ghost" icon="i-lucide-key-round" aria-label="Login In"
+                        to="/login" />
                 <UColorModeButton />
 
                 <!-- <UTooltip text="Open on GitHub" :kbds="['meta', 'G']">
