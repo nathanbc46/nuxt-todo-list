@@ -6,7 +6,7 @@ export default defineAppConfig({
     },
     toaster: {
       defaultVariants : {
-        position: 'top-center'
+        position: 'top-right'
       }
     },
     button: {

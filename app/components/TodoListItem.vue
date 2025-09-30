@@ -41,7 +41,7 @@ function onRemoveItem(id: string) {
                         description="Update todo list Items name" 
                         placeholder="Enter todo list Items name" 
                         @update="onItemTitleUpdated(item.id, $event)">
-                           <Icon size="1.25em" name="material-symbols:edit" class="text-blue-500 cursor-pointer" />
+                           <Icon size="1.25em" name="material-symbols:edit" class="text-blue-500 min-w-6 cursor-pointer" />
                         </ModalUpdateTitle>  
                         
                         <ModalConfirm
@@ -51,7 +51,7 @@ function onRemoveItem(id: string) {
                             @confirmed="onRemoveItem(item.id)" >
                             <Icon 
                             size="1.25em" name="material-symbols:delete-forever-rounded" 
-                            class="text-red-500 cursor-pointer"
+                            class="text-red-500 min-w-6 cursor-pointer"
                             />
                         </ModalConfirm>
                     

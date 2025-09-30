@@ -5,8 +5,8 @@ const toast = useToast()
 
 // Props // รับข้อมูลมาจาก Parent
 const props = defineProps<{
-    title: string,
-    subtitle: string
+    title?: string,
+    subtitle?: string
 }>()
 
 function onTodoTitleUpdated(id: string, newTitle: string) {
@@ -40,7 +40,7 @@ async function onSyncTodo(id: string) {
 <template>
     <div>
         <h1 class="text-2xl">
-            <Icon name='material-symbols:checklist' /> {{ props.title }} : <small>{{ props.subtitle }}</small>
+            {{ props.title }}  <small>{{ props.subtitle }}</small>
         </h1>
         <ClientOnly>
             <ul v-if="todos.length > 0" class="flex flex-col gap-2 mt-4">

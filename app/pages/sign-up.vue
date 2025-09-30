@@ -8,7 +8,10 @@ const input = ref({
     name: ''
 })
 
+const loading = ref(false)
+
 async function onSignUp() {
+   loading.value = true
    const { data, error } = await authClient.signUp.email({
         ...input.value
     })
@@ -29,6 +32,7 @@ async function onSignUp() {
         })
         await navigateTo('/login')
     }
+    loading.value = false
 }
 </script>
 <template>
@@ -47,7 +51,7 @@ async function onSignUp() {
                 <UFormField label="Password" name="password">
                     <UInput v-model="input.password" class="w-full" type="password" placeholder="Enter your password" />
                 </UFormField>
-                <UButton color="primary" type="submit" block>Sign Up</UButton>
+                <UButton color="primary" :loading="loading" type="submit" block>Sign Up</UButton>
             </UForm>
         </div>
     </div>
